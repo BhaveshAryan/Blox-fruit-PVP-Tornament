@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grand Line Brackets</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#eaf2f4; --sub:#9db3ba; --bg:#0a1a1f; --bg2:#0f242b; --card:#123039;
+  --line:#1d4550; --gold:#f2b544; --coral:#ff6b5b; --teal:#38c7b8; --win:#4ade80;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --ink:#0a1a1f; --sub:#4c6169; --bg:#f4f8f9; --bg2:#e9f1f2; --card:#ffffff; --line:#d7e4e6; }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;min-height:100%}
+h1,h2,h3,.nav-brand,.stat-val{font-family:'Oswald',sans-serif}
+header{position:sticky;top:0;padding-top:env(safe-area-inset-top,0px);background:rgba(10,26,31,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:10}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) header{background:rgba(244,248,249,.92)}}
+.nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.nav-brand{font-weight:700;font-size:1.3rem;letter-spacing:.3px;cursor:pointer;color:var(--ink);text-decoration:none;display:flex;gap:8px;align-items:center}
+.nav-brand span{color:var(--coral)}
+.nav-tabs{display:flex;gap:6px}
+.nav-tabs button{background:none;border:1px solid var(--line);color:var(--sub);padding:8px 14px;border-radius:6px;font-size:.85rem;cursor:pointer;font-weight:500}
+.nav-tabs button.active{background:var(--teal);color:#04181c;border-color:var(--teal)}
+main{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+.overflow{overflow-x:auto}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:16px;cursor:pointer}
+.tcard:hover{border-color:var(--teal)}
+.trow{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;letter-spacing:.3px}
+.b-live{background:rgba(255,107,91,.18);color:var(--coral)}
+.b-upcoming{background:rgba(56,199,184,.18);color:var(--teal)}
+.b-completed{background:rgba(157,179,186,.18);color:var(--sub)}
+.stats{display:flex;gap:26px;margin-top:10px;flex-wrap:wrap}
+.stat-label{font-size:.72rem;color:var(--sub);text-transform:uppercase;letter-spacing:.5px}
+.stat-val{font-size:1.15rem;font-weight:600}
+.btn{background:var(--teal);color:#04181c;border:none;padding:10px 18px;border-radius:6px;font-weight:600;cursor:pointer;font-size:.88rem}
+.btn.secondary{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn.danger{background:var(--coral);color:#2a0a06}
+.btn.small{padding:6px 12px;font-size:.78rem}
+.section-title{font-size:1.4rem;font-weight:600;margin:34px 0 14px}
+.empty{color:var(--sub);padding:30px 0;text-align:center;font-size:.92rem}
+.bracket{display:flex;gap:46px;padding:20px 4px 30px;min-width:max-content}
+.round-col{display:flex;flex-direction:column;justify-content:space-around;gap:20px;min-width:220px}
+.round-label{font-size:.75rem;text-transform:uppercase;color:var(--sub);letter-spacing:.6px;margin-bottom:8px;text-align:center}
+.match{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative}
+.match.clickable{cursor:pointer}
+.match.clickable:hover{border-color:var(--gold)}
+.slot{display:flex;justify-content:space-between;padding:9px 12px;font-size:.87rem;border-bottom:1px solid var(--line)}
+.slot:last-child{border-bottom:none}
+.slot.winner{color:var(--win);font-weight:600}
+.slot.tbd{color:var(--sub);font-style:italic}
+.slot .sc{font-weight:600;color:var(--sub)}
+.slot.winner .sc{color:var(--win)}
+.mstatus{position:absolute;top:6px;right:8px;font-size:.62rem;padding:2px 7px;border-radius:10px}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.pchip{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:.85rem;display:flex;justify-content:space-between}
+.pchip .seed{color:var(--sub);font-size:.75rem}
+.field{margin-bottom:14px}
+label{display:block;font-size:.78rem;color:var(--sub);margin-bottom:5px}
+input,textarea,select{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:9px 11px;border-radius:6px;font-family:inherit;font-size:.9rem}
+textarea{min-height:70px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
+.modal{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:24px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto}
+.modal h3{margin-top:0}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.admin-panel{display:grid;grid-template-columns:280px 1fr;gap:24px}
+@media(max-width:720px){.admin-panel{grid-template-columns:1fr}}
+.admin-list .tcard{padding:12px 14px}
+.admin-list .tcard h3{margin:0 0 4px;font-size:.95rem}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+a.back{color:var(--sub);text-decoration:none;font-size:.85rem}
+.pname-input{width:100%}
+.addrow{display:flex;gap:8px;margin-bottom:10px}
+.addrow input{flex:1}
+.hint{color:var(--sub);font-size:.78rem;margin-top:4px}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <a class="nav-brand" href="#" onclick="go('home');return false;">🌊 Grand Line <span>Brackets</span></a>
+    <div class="nav-tabs">
+      <button id="tab-player" class="active" onclick="go('home')">Player</button>
+      <button id="tab-admin" onclick="go('admin')">Operator</button>
+    </div>
+  </div>
+</header>
+<main id="app"></main>
+
+<script>
+const STORE_KEY='gl_tournaments_v1';
+function load(){ try{return JSON.parse(localStorage.getItem(STORE_KEY))||seed();}catch(e){return seed();} }
+function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+function seed(){
+  return [{
+    id: uid(), name:'Blox Fruits 1v1 Championship #01', description:'Weekly 1v1 PvP knockout tournament. Any fruit, any fighting style — last pirate standing takes the prize.',
+    format:'Single Elimination', prize:'2,000,000 Beli + Legendary Fruit crate', rules:'No teaming. No glitch abuse. Best of 3 per match unless stated otherwise. Server link posted per match.',
+    startDate:'2026-10-03T18:00', status:'live', banner:'', participants:[], rounds:[]
+  }];
+}
+let state = load();
+let view = {mode:'home', tid:null, admin:false};
+const OPERATOR_PASSWORD='8126yu7';
+function operatorUnlocked(){ return sessionStorage.getItem('gl_op_unlocked')==='1'; }
+
+function go(mode, tid){
+  if(mode==='admin' && !operatorUnlocked()){ openPasswordGate(); return; }
+  view={mode, tid: tid||null}; render(); window.scrollTo(0,0);
+}
+document.getElementById('tab-admin').onclick=()=>go('admin');
+document.getElementById('tab-player').onclick=()=>go('home');
+
+function openPasswordGate(){
+  const root=ensureModalRoot();
+  root.innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h3>Operator access</h3>
+    <div class="field"><label>Password</label><input id="op_pw" type="password" onkeydown="if(event.key==='Enter')submitPasswordGate()" autofocus></div>
+    <div id="op_pw_err" style="color:var(--coral);font-size:.82rem;display:none;margin-top:-6px;margin-bottom:10px">Incorrect password.</div>
+    <div class="modal-actions">
+      <button class="btn secondary small" onclick="closeModal()">Cancel</button>
+      <button class="btn small" onclick="submitPasswordGate()">Enter</button>
+    </div>
+  </div></div>`;
+  setTimeout(()=>document.getElementById('op_pw')?.focus(),0);
+}
+function submitPasswordGate(){
+  const val=document.getElementById('op_pw').value;
+  if(val===OPERATOR_PASSWORD){
+    sessionStorage.setItem('gl_op_unlocked','1');
+    closeModal();
+    go('admin');
+  } else {
+    document.getElementById('op_pw_err').style.display='block';
+  }
+}
+
+function fmtDate(s){ if(!s) return 'TBD'; const d=new Date(s); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); }
+function statusBadge(s){ const m={live:'b-live',upcoming:'b-upcoming',completed:'b-completed',draft:'b-completed'}; const label={live:'LIVE',upcoming:'UPCOMING',completed:'COMPLETED',draft:'DRAFT'}; return `<span class="badge ${m[s]}">${label[s]}</span>`; }
+function activeCount(t){ return t.participants.length; }
+function currentRoundName(t){
+  if(!t.rounds.length) return '—';
+  for(const r of t.rounds){ if(r.some(m=>m.status!=='completed')) return r.name; }
+  return t.rounds[t.rounds.length-1].name;
+}
+
+// ---------- Bracket generation ----------
+function roundName(size, totalRounds, idx){
+  const remaining = totalRounds - idx;
+  if(remaining===1) return 'Final';
+  if(remaining===2) return 'Semifinals';
+  if(remaining===3) return 'Quarterfinals';
+  return 'Round of ' + Math.pow(2, remaining);
+}
+function generateBracket(t){
+  let players = t.participants.slice();
+  // shuffle (random seed) if not manually seeded order kept as-is otherwise
+  let n = players.length;
+  if(n<2){ t.rounds=[]; return; }
+  let size = 1; while(size<n) size*=2;
+  while(players.length<size) players.push(null); // bye slots
+  const totalRounds = Math.log2(size);
+  const rounds=[];
+  let firstRound=[];
+  for(let i=0;i<size;i+=2){
+    const p1=players[i], p2=players[i+1];
+    const m={id:uid(), p1, p2, score1:null, score2:null, winner:null, status:'upcoming', time:'', server:'', stream:''};
+    if(p1 && !p2){ m.winner=p1.id; m.status='completed'; }
+    if(p2 && !p1){ m.winner=p2.id; m.status='completed'; }
+    firstRound.push(m);
+  }
+  rounds.push(firstRound);
+  for(let r=1;r<totalRounds;r++){
+    const prev=rounds[r-1]; const cur=[];
+    for(let i=0;i<prev.length;i+=2){
+      cur.push({id:uid(), p1:null, p2:null, score1:null, score2:null, winner:null, status:'upcoming', time:'', server:'', stream:''});
+    }
+    rounds.push(cur);
+  }
+  rounds.forEach((r,i)=> r.name = roundName(size, totalRounds, i));
+  t.rounds = rounds;
+  propagateByes(t);
+}
+function playerById(t,id){ return t.participants.find(p=>p.id===id); }
+function propagateByes(t){
+  for(let r=0;r<t.rounds.length-1;r++){
+    t.rounds[r].forEach((m,i)=>{
+      if(m.status==='completed' && m.winner){
+        const next=t.rounds[r+1][Math.floor(i/2)];
+        if(i%2===0) next.p1 = playerById(t,m.winner); else next.p2 = playerById(t,m.winner);
+      }
+    });
+  }
+}
+function setWinner(t, r, i, winnerId, s1, s2){
+  const m=t.rounds[r][i];
+  m.winner=winnerId; m.score1=s1; m.score2=s2; m.status='completed';
+  if(r+1<t.rounds.length){
+    const next=t.rounds[r+1][Math.floor(i/2)];
+    const wp=playerById(t,winnerId);
+    if(i%2===0) next.p1=wp; else next.p2=wp;
+    // clear downstream if this changes an existing pick
+    if(next.winner){ clearFrom(t,r+1,Math.floor(i/2)); }
+  } else {
+    t.status='completed';
+  }
+  save();
+}
+function clearFrom(t,r,i){
+  const m=t.rounds[r][i];
+  m.winner=null; m.status = (m.p1&&m.p2)?'upcoming':'upcoming'; m.score1=null; m.score2=null;
+  if(r+1<t.rounds.length){
+    const next=t.rounds[r+1][Math.floor(i/2)];
+    if(i%2===0) next.p1=null; else next.p2=null;
+    if(next.winner) clearFrom(t,r+1,Math.floor(i/2));
+  }
+}
+
+// ---------- Render ----------
+function render(){
+  document.getElementById('tab-admin').classList.toggle('active', view.mode==='admin');
+  document.getElementById('tab-player').classList.toggle('active', view.mode!=='admin');
+  const app=document.getElementById('app');
+  if(view.mode==='home') app.innerHTML = renderHome();
+  else if(view.mode==='tournament') app.innerHTML = renderTournament(view.tid);
+  else if(view.mode==='admin') app.innerHTML = renderAdmin();
+}
+
+function renderHome(){
+  const live=state.filter(t=>t.status==='live');
+  const upcoming=state.filter(t=>t.status==='upcoming');
+  const done=state.filter(t=>t.status==='completed');
+  const card=t=>`<div class="tcard" onclick="go('tournament','${t.id}')">
+    <div class="trow">
+      <div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+          <h3 style="margin:0">${esc(t.name)}</h3>${statusBadge(t.status)}
+        </div>
+        <div style="color:var(--sub);font-size:.85rem;max-width:560px">${esc(t.description||'')}</div>
+        <div class="stats">
+          <div><div class="stat-label">Participants</div><div class="stat-val">${activeCount(t)}${t.maxParticipants?(' / '+t.maxParticipants):''}</div></div>
+          <div><div class="stat-label">Round</div><div class="stat-val">${currentRoundName(t)}</div></div>
+          <div><div class="stat-label">Starts</div><div class="stat-val" style="font-size:.95rem">${fmtDate(t.startDate)}</div></div>
+        </div>
+      </div>
+      <button class="btn small" onclick="event.stopPropagation();go('tournament','${t.id}')">View Bracket</button>
+    </div>
+  </div>`;
+  const sec=(title,list)=> list.length? `<div class="section-title">${title}</div>${list.map(card).join('')}` : '';
+  if(!state.length) return `<div class="empty">No tournaments yet. Head to the Operator tab to create one.</div>`;
+  return (sec('Live Now', live) || '') + (sec('Upcoming', upcoming)||'') + (sec('Completed', done)||'') || `<div class="empty">No tournaments to show yet.</div>`;
+}
+
+function renderTournament(tid){
+  const t=state.find(x=>x.id===tid);
+  if(!t) return `<div class="empty">Tournament not found.</div>`;
+  const bracket = t.rounds.length ? renderBracket(t,false) : `<div class="empty">Bracket hasn't been generated yet.</div>`;
+  const plist = t.participants.length ? `<div class="plist">${t.participants.map(p=>`<div class="pchip"><span>${esc(p.name)}</span><span class="seed">#${p.seed}</span></div>`).join('')}</div>` : `<div class="empty">No participants added yet.</div>`;
+  return `
+  <a class="back" href="#" onclick="go('home');return false;">← All tournaments</a>
+  <div style="display:flex;gap:12px;align-items:center;margin:10px 0 4px;flex-wrap:wrap">
+    <h1 style="margin:0">${esc(t.name)}</h1>${statusBadge(t.status)}
+  </div>
+  <p style="color:var(--sub);max-width:640px">${esc(t.description||'')}</p>
+  <div class="stats" style="margin-bottom:10px">
+    <div><div class="stat-label">Format</div><div class="stat-val">${esc(t.format)}</div></div>
+    <div><div class="stat-label">Participants</div><div class="stat-val">${activeCount(t)}</div></div>
+    <div><div class="stat-label">Starts</div><div class="stat-val" style="font-size:1rem">${fmtDate(t.startDate)}</div></div>
+    <div><div class="stat-label">Prize</div><div class="stat-val" style="font-size:1rem">${esc(t.prize||'—')}</div></div>
+  </div>
+  ${t.rules?`<div class="tcard" style="cursor:default"><strong>Rules</strong><p style="margin:8px 0 0;color:var(--sub);font-size:.88rem">${esc(t.rules)}</p></div>`:''}
+  <div class="section-title">Bracket</div>
+  <div class="overflow">${bracket}</div>
+  <div class="section-title">Participants</div>
+  ${plist}
+  `;
+}
+
+function renderBracket(t, editable){
+  return `<div class="bracket">${t.rounds.map((round,ri)=>`
+    <div class="round-col">
+      <div class="round-label">${round.name}</div>
+      ${round.map((m,mi)=>renderMatch(t,ri,mi,editable)).join('')}
+    </div>`).join('')}</div>`;
+}
+function slotHTML(t,m,which){
+  const p = which===1?m.p1:m.p2;
+  const score = which===1?m.score1:m.score2;
+  const isWinner = m.winner && p && m.winner===p.id;
+  if(!p) return `<div class="slot tbd"><span>TBD</span></div>`;
+  return `<div class="slot ${isWinner?'winner':''}"><span>${esc(p.name)}</span>${score!==null&&score!==undefined?`<span class="sc">${score}</span>`:''}</div>`;
+}
+function renderMatch(t,ri,mi,editable){
+  const m=t.rounds[ri][mi];
+  const statusMap={upcoming:'b-upcoming',live:'b-live',completed:'b-completed','pending':'b-upcoming'};
+  const clickAttr = editable ? `onclick="openMatchModal('${t.id}',${ri},${mi})" class="match clickable"` : `class="match"`;
+  return `<div ${clickAttr}>
+    <span class="mstatus ${statusMap[m.status]||'b-upcoming'}">${(m.status||'upcoming').toUpperCase()}</span>
+    ${slotHTML(t,m,1)}${slotHTML(t,m,2)}
+  </div>`;
+}
+function esc(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ---------- Admin ----------
+let adminSelected = state[0]?state[0].id:null;
+function renderAdmin(){
+  const list = state.map(t=>`<div class="tcard ${t.id===adminSelected?'':''}" style="${t.id===adminSelected?'border-color:var(--gold)':''}" onclick="adminSelected='${t.id}';render()">
+    <h3>${esc(t.name)}</h3>${statusBadge(t.status)}
+  </div>`).join('') || `<div class="empty">No tournaments.</div>`;
+  const t = state.find(x=>x.id===adminSelected);
+  return `<div class="admin-panel">
+    <div class="admin-list">
+      <button class="btn" style="width:100%;margin-bottom:14px" onclick="openTournamentForm()">+ New Tournament</button>
+      ${list}
+    </div>
+    <div>${t?renderAdminDetail(t):`<div class="empty">Select or create a tournament to manage it.</div>`}</div>
+  </div>${modalContainer()}`;
+}
+
+function renderAdminDetail(t){
+  const canGenerate = t.participants.length>=2;
+  return `
+  <div class="toolbar">
+    <button class="btn secondary small" onclick="openTournamentForm('${t.id}')">Edit Details</button>
+    <button class="btn secondary small" onclick="setStatus('${t.id}','live')">Set Live</button>
+    <button class="btn secondary small" onclick="setStatus('${t.id}','upcoming')">Set Upcoming</button>
+    <button class="btn secondary small" onclick="setStatus('${t.id}','completed')">Mark Completed</button>
+    <button class="btn secondary small" onclick="duplicateTournament('${t.id}')">Duplicate</button>
+    <button class="btn danger small" onclick="deleteTournament('${t.id}')">Delete</button>
+  </div>
+  <div class="section-title" style="margin-top:6px">Participants (${t.participants.length})</div>
+  <div class="addrow">
+    <input id="newPlayerName" placeholder="Player username" onkeydown="if(event.key==='Enter')addPlayer('${t.id}')">
+    <button class="btn small" onclick="addPlayer('${t.id}')">Add</button>
+  </div>
+  <div class="plist" style="margin-bottom:8px">
+    ${t.participants.map(p=>`<div class="pchip"><span>#${p.seed} ${esc(p.name)}</span><span style="cursor:pointer;color:var(--coral)" onclick="removePlayer('${t.id}','${p.id}')">✕</span></div>`).join('') || '<div class="empty" style="padding:8px 0">No players yet.</div>'}
+  </div>
+  <div class="toolbar">
+    <button class="btn small" ${canGenerate?'':'disabled style="opacity:.4"'} onclick="doGenerate('${t.id}')">${t.rounds.length?'Regenerate Bracket':'Generate Bracket'}</button>
+    <button class="btn secondary small" onclick="randomizeSeeds('${t.id}')">Randomize Seeding</button>
+  </div>
+  <div class="hint" style="margin-bottom:14px">Regenerating rebuilds the whole bracket from current seeding — any recorded results are cleared.</div>
+  <div class="section-title">Bracket — click a match to enter a result</div>
+  <div class="overflow">${t.rounds.length?renderBracket(t,true):'<div class="empty">Add at least 2 players and generate the bracket.</div>'}</div>
+  `;
+}
+
+function setStatus(tid,s){ const t=state.find(x=>x.id===tid); t.status=s; save(); render(); }
+function duplicateTournament(tid){ const t=state.find(x=>x.id===tid); const copy=JSON.parse(JSON.stringify(t)); copy.id=uid(); copy.name=t.name+' (Copy)'; copy.status='draft'; copy.rounds=[]; copy.participants.forEach(p=>p.id=uid()); state.push(copy); adminSelected=copy.id; save(); render(); }
+function deleteTournament(tid){ if(!confirm('Delete this tournament? This cannot be undone.'))return; state=state.filter(x=>x.id!==tid); adminSelected=state[0]?state[0].id:null; save(); render(); }
+function addPlayer(tid){ const t=state.find(x=>x.id===tid); const inp=document.getElementById('newPlayerName'); const name=inp.value.trim(); if(!name)return; t.participants.push({id:uid(), name, seed:t.participants.length+1, status:'active'}); inp.value=''; save(); render(); }
+function removePlayer(tid,pid){ const t=state.find(x=>x.id===tid); t.participants=t.participants.filter(p=>p.id!==pid); t.participants.forEach((p,i)=>p.seed=i+1); save(); render(); }
+function randomizeSeeds(tid){ const t=state.find(x=>x.id===tid); for(let i=t.participants.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [t.participants[i],t.participants[j]]=[t.participants[j],t.participants[i]]; } t.participants.forEach((p,i)=>p.seed=i+1); save(); render(); }
+function doGenerate(tid){ const t=state.find(x=>x.id===tid); if(t.rounds.length && !confirm('This clears any recorded results. Continue?'))return; generateBracket(t); save(); render(); }
+
+function modalContainer(){ return `<div id="modalRoot"></div>`; }
+function openTournamentForm(tid){
+  const t = tid ? state.find(x=>x.id===tid) : null;
+  const root=ensureModalRoot();
+  root.innerHTML = `<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h3>${t?'Edit Tournament':'New Tournament'}</h3>
+    <div class="field"><label>Name</label><input id="f_name" value="${t?esc(t.name):''}"></div>
+    <div class="field"><label>Description</label><textarea id="f_desc">${t?esc(t.description||''):''}</textarea></div>
+    <div class="row2">
+      <div class="field"><label>Format</label><input id="f_format" value="${t?esc(t.format):'Single Elimination'}"></div>
+      <div class="field"><label>Start date/time</label><input id="f_start" type="datetime-local" value="${t?(t.startDate||''):''}"></div>
+    </div>
+    <div class="field"><label>Prize</label><input id="f_prize" value="${t?esc(t.prize||''):''}"></div>
+    <div class="field"><label>Rules</label><textarea id="f_rules">${t?esc(t.rules||''):''}</textarea></div>
+    <div class="modal-actions">
+      <button class="btn secondary small" onclick="closeModal()">Cancel</button>
+      <button class="btn small" onclick="saveTournamentForm('${t?t.id:''}')">Save</button>
+    </div>
+  </div></div>`;
+}
+function saveTournamentForm(tid){
+  const vals={name:document.getElementById('f_name').value.trim()||'Untitled Tournament', description:document.getElementById('f_desc').value, format:document.getElementById('f_format').value||'Single Elimination', startDate:document.getElementById('f_start').value, prize:document.getElementById('f_prize').value, rules:document.getElementById('f_rules').value};
+  if(tid){ Object.assign(state.find(x=>x.id===tid), vals); }
+  else { const nt={id:uid(), status:'draft', participants:[], rounds:[], ...vals}; state.push(nt); adminSelected=nt.id; }
+  save(); closeModal(); render();
+}
+function openMatchModal(tid,ri,mi){
+  const t=state.find(x=>x.id===tid); const m=t.rounds[ri][mi];
+  if(!m.p1 || !m.p2){ return; }
+  const root=ensureModalRoot();
+  root.innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <h3>${t.rounds[ri].name} — Match</h3>
+    <div class="row2">
+      <div class="field"><label>${esc(m.p1.name)} score</label><input id="m_s1" type="number" value="${m.score1!=null?m.score1:''}"></div>
+      <div class="field"><label>${esc(m.p2.name)} score</label><input id="m_s2" type="number" value="${m.score2!=null?m.score2:''}"></div>
+    </div>
+    <div class="field"><label>Status</label>
+      <select id="m_status">
+        ${['upcoming','live','pending','completed'].map(s=>`<option value="${s}" ${m.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field"><label>Winner</label>
+      <select id="m_winner">
+        <option value="">— none yet —</option>
+        <option value="${m.p1.id}" ${m.winner===m.p1.id?'selected':''}>${esc(m.p1.name)}</option>
+        <option value="${m.p2.id}" ${m.winner===m.p2.id?'selected':''}>${esc(m.p2.name)}</option>
+      </select>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Scheduled time</label><input id="m_time" value="${esc(m.time||'')}" placeholder="e.g. Today 8:00 PM"></div>
+      <div class="field"><label>Private server link</label><input id="m_server" value="${esc(m.server||'')}"></div>
+    </div>
+    <div class="field"><label>Stream link</label><input id="m_stream" value="${esc(m.stream||'')}"></div>
+    <div class="modal-actions">
+      <button class="btn secondary small" onclick="closeModal()">Cancel</button>
+      <button class="btn small" onclick="saveMatch('${tid}',${ri},${mi})">Save</button>
+    </div>
+  </div></div>`;
+}
+function saveMatch(tid,ri,mi){
+  const t=state.find(x=>x.id===tid); const m=t.rounds[ri][mi];
+  const s1=document.getElementById('m_s1').value, s2=document.getElementById('m_s2').value;
+  const status=document.getElementById('m_status').value;
+  const winner=document.getElementById('m_winner').value;
+  m.time=document.getElementById('m_time').value; m.server=document.getElementById('m_server').value; m.stream=document.getElementById('m_stream').value;
+  m.score1 = s1===''?null:Number(s1); m.score2 = s2===''?null:Number(s2); m.status=status;
+  if(winner){ setWinner(t,ri,mi,winner,m.score1,m.score2); } else { m.winner=null; save(); }
+  closeModal(); render();
+}
+function ensureModalRoot(){ let r=document.getElementById('modalRoot'); if(!r){ r=document.createElement('div'); r.id='modalRoot'; document.body.appendChild(r);} return r; }
+function closeModal(){ const r=document.getElementById('modalRoot'); if(r) r.innerHTML=''; }
+
+render();
+</script>
+</body>
+</html>
